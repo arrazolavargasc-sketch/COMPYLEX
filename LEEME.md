@@ -6,6 +6,12 @@
 - También puedes abrir **grafos.html** con Chrome, Edge o Firefox.
 - No se necesitan instalaciones, conexión a Internet ni servidor web para usar los grafos.
 
+## Publicar en Vercel
+
+El laboratorio de grafos es una aplicación estática HTML/CSS/JavaScript; `main.py` solo sirve para abrirla localmente y no es una API web. El archivo `vercel.json` configura el preset **Other**, publica los archivos de esta carpeta y dirige la ruta `/` a `grafos.html`.
+
+En Vercel, selecciona como **Root Directory** la carpeta que contiene `vercel.json` (la raíz del repositorio si subiste el contenido de `COMPYLEX`) y vuelve a desplegar. No configures un runtime Python para este proyecto.
+
 El inicio muestra **el grafo ponderado de la foto del pizarrón**, con **12 nodos y 21 aristas**. La posición inicial respeta aproximadamente la distribución de la foto; puedes mover los nodos, y el botón **Restaurar ejemplo** recupera el grafo de la pizarra.
 
 ## Algoritmos y funciones
