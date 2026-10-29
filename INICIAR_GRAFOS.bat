@@ -1,3 +1,3 @@
 @echo off
 cd /d "%~dp0"
-start "" "grafos.html"
+start "" "public\index.html"

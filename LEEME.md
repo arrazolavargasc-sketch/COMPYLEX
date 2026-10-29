@@ -1,69 +1,80 @@
 # COMPYLEX — Laboratorio de grafos
 
-## Inicio del programa
+## Publicar en Vercel (solución al error `PYTHON_ENTRYPOINT_NOT_FOUND`)
 
-- En Windows, abre **INICIAR_GRAFOS.bat** o ejecuta `python main.py` desde esta carpeta.
-- También puedes abrir **grafos.html** con Chrome, Edge o Firefox.
-- No se necesitan instalaciones, conexión a Internet ni servidor web para usar los grafos.
+COMPYLEX tiene dos partes diferentes:
 
-## Publicar en Vercel
+- **Laboratorio web de grafos**: HTML, CSS y JavaScript; no requiere Python ni backend y es lo que se publica en Vercel.
+- **Analizador de expresiones local**: usa Python y Dear PyGui; se mantiene en `escritorio/` para usarlo en Windows. Esa interfaz de escritorio **no funciona dentro de Vercel**.
 
-El laboratorio de grafos es una aplicación estática HTML/CSS/JavaScript; `main.py` solo sirve para abrirla localmente y no es una API web. El archivo `vercel.json` configura el preset **Other**, publica los archivos de esta carpeta y dirige la ruta `/` a `grafos.html`.
+Los archivos web se trasladaron a `public/`, que contiene `index.html` y todos sus recursos. El lanzador Python y sus dependencias se trasladaron a `escritorio/` para que Vercel no interprete `main.py` de la raíz como una API Python.
 
-En Vercel, selecciona como **Root Directory** la carpeta que contiene `vercel.json` (la raíz del repositorio si subiste el contenido de `COMPYLEX`) y vuelve a desplegar. No configures un runtime Python para este proyecto.
+`vercel.json` establece `outputDirectory: "public"` y no necesita redirecciones ni rewrites: la ruta `/` encuentra `public/index.html` directamente.
 
-El inicio muestra **el grafo ponderado de la foto del pizarrón**, con **12 nodos y 21 aristas**. La posición inicial respeta aproximadamente la distribución de la foto; puedes mover los nodos, y el botón **Restaurar ejemplo** recupera el grafo de la pizarra.
+### Instrucciones para tu repositorio GitHub
 
-## Algoritmos y funciones
+1. **Copia los archivos de esta versión a la raíz de tu repositorio local.** Reemplaza los antiguos; no dejes en la raíz `main.py`, `requirements.txt`, `grafos.html`, `grafos.js`, `grafo_algoritmos.js`, `grafos.css`, `grafos-tabla.css` ni los módulos `compilador.py`, `lexer.py`, `parser.py`, `arbol.py`, `evaluador.py`, `visualizador.py`. Ya están reubicados en `public/` o `escritorio/`.
+2. Abre PowerShell en la carpeta de tu repositorio (la que contiene `.git`). **Elimina los archivos de la versión antigua que quedaron en la raíz**. Es normal que estén ausentes algunos; la versión nueva está en `public/` y `escritorio/`:
 
-- Kruskal mínimo y máximo.
-- Prim mínimo y máximo.
-- BFS y DFS desde un nodo.
-- Dijkstra y Floyd-Warshall (camino más corto con origen y destino elegibles).
-- Verificación de árbol y de los resultados de Kruskal/Prim: conectado, sin ciclos y con exactamente V−1 aristas. Un grafo vacío no se considera árbol.
-- Matrices de adyacencia (ponderada) e incidencia.
-- Tabla del árbol de expansión mínimo/máximo con el orden de selección, las aristas (nodos conectados) y sus pesos.
-- Agregar, conectar, eliminar y mover nodos; editar pesos desde el panel izquierdo.
-- Grafos dirigidos/no dirigidos y exportación/importación JSON.
-- Descargar el dibujo como SVG y **modo presentación** para proyectar.
+   ```powershell
+   Remove-Item -ErrorAction SilentlyContinue main.py,requirements.txt,grafos.html,grafos.css,grafos-tabla.css,grafos.js,grafo_algoritmos.js,arbol.py,compilador.py,evaluador.py,lexer.py,parser.py,visualizador.py
+   ```
 
-Para conectar nodos, elige **Conectar**, pulsa el nodo inicial y luego el nodo final; aparecerá la entrada de peso. En modo **Mover**, haz clic sobre una arista para editar su peso, o pulsa **Eliminar** para quitar el elemento seleccionado. También puedes eliminarlo con `Supr`.
+   Después registra también las eliminaciones y sube el cambio:
 
-**Nota:** los pesos que no estaban presentes en la primera descripción textual sí se han incluido de la imagen más reciente. El grafo original tiene ciclos; un árbol de expansión lo transforma en un conjunto de 11 aristas sin ciclos.
+   ```powershell
+   git add -A
+   git commit -m "Fix: publicar COMPYLEX como sitio estático en Vercel"
+   git push origin main
+   ```
 
-## El analizador original sigue incluido
+   Si tu rama se llama diferente, usa ese nombre en lugar de `main`.
+3. En Vercel abre tu proyecto, **Settings → Build and Deployment** (o **Build and Development Settings**): selecciona **Framework Preset = Other**. La **Root Directory** debe ser la que contiene `vercel.json` y la carpeta `public` (normalmente `./`). Desactiva comandos de compilación personalizados que estén configurados para Python. La **Output Directory** será `public`, definida en `vercel.json`.
+4. Espera el despliegue de la rama de producción o usa **Deployments → Redeploy** sobre el último commit. Abre el dominio de Vercel: `/` debe cargar el grafo con 12 nodos y 21 aristas.
 
-El antiguo **COMPYLEX — Analizador de Expresiones** se preservó como `compilador.py`. Para ejecutarlo:
+> **ATENCIÓN:** subir únicamente los archivos nuevos a GitHub sin eliminar los archivos antiguos deja un `main.py` en la raíz y podría provocar el mismo error. Usa `git add -A` para registrar también los archivos eliminados.
 
-```powershell
-python -m pip install -r requirements.txt
-python main.py --compilador
-```
-
-O con **INICIAR_COMPILADOR.bat**. Sus archivos (`lexer.py`, `parser.py`, `evaluador.py`, `arbol.py`, `visualizador.py`) se mantienen sin alteraciones.
-
-## Archivos principales
-
-- `main.py`: arranque por defecto del laboratorio de grafos.
-- `grafos.html`: interfaz de usuario del laboratorio.
-- `grafos.css`: estilos y modo presentación.
-- `grafos.js`: interactividad y distribución inicial del grafo.
-- `grafo_algoritmos.js`: implementación de los algoritmos.
-- `compilador.py`: analizador de expresiones original.
-
-## Conexiones y pesos transcritos de la pizarra
+### Estructura
 
 ```text
-1–3: 1    1–2: 3    1–4: 4    1–5: 1
-2–3: 6    2–4: 5    2–6: 3
-3–6: 2    3–10: 7
-4–7: 9
-5–10: 3   5–11: 14
-6–7: 3    6–9: 1
-7–8: 10   7–9: 11
-8–12: 1
-9–10: 18  9–12: 16
-10–11: 15  11–12: 20
+COMPYLEX/  ← raíz del repositorio GitHub
+├─ vercel.json
+├─ public/
+│  ├─ index.html
+│  ├─ grafos.css
+│  ├─ grafos-tabla.css
+│  ├─ grafos.js
+│  └─ grafo_algoritmos.js
+├─ escritorio/
+│  ├─ main.py
+│  ├─ compilador.py
+│  ├─ lexer.py
+│  ├─ parser.py
+│  ├─ evaluador.py
+│  ├─ arbol.py
+│  ├─ visualizador.py
+│  └─ requirements.txt
+├─ INICIAR_GRAFOS.bat
+└─ INICIAR_COMPILADOR.bat
 ```
 
-**Resultados de control:** Kruskal mínimo = **43**, Kruskal máximo = **118**, Dijkstra de **1** a **12** = **17** (ruta 1–3–6–7–8–12). La tabla de Kruskal muestra, en orden, las 11 aristas seleccionadas y sus pesos. Para presentación, usa **Modo presentación** en el programa y opcionalmente `F11` en tu navegador.
+## Ejecutar localmente (Windows)
+
+- Doble clic en `INICIAR_GRAFOS.bat` o abrir `public/index.html` con Chrome/Edge/Firefox. También puedes ejecutar `python escritorio/main.py` desde la raíz.
+- Para abrir el analizador de expresiones original: `INICIAR_COMPILADOR.bat`, o instala sus dependencias con `python -m pip install -r escritorio/requirements.txt` y después ejecuta `python escritorio/compilador.py`.
+- No necesitas instalar Python para el laboratorio web de grafos.
+
+## Funciones del laboratorio de grafos (sin modificaciones)
+
+- Grafo inicial de la pizarra, con 12 nodos y 21 aristas ponderadas.
+- Mover, agregar, conectar y eliminar nodos, y editar pesos.
+- Grafos dirigidos y no dirigidos; exportar e importar JSON; descargar SVG.
+- Kruskal y Prim mínimo/máximo; recorridos BFS/DFS; Dijkstra y Floyd-Warshall.
+- Matriz de adyacencia e incidencia; verificación de árbol; modo presentación.
+
+## Por qué aparecían los errores
+
+- `PYTHON_ENTRYPOINT_NOT_FOUND`: Vercel detectaba `main.py` en la raíz y esperaba un objeto Python `app`/`application`/`handler`. Aquí `main.py` solo abría una página con `webbrowser`; no exponía servidor.
+- `Internal rewrites ...`: la regla `/` → `/grafos.html` ya no es necesaria. `public/index.html` es la entrada directamente y no tenemos rewrites.
+
+> Esta versión se prepara para despliegue estático. Después de subir el commit a GitHub, Vercel podrá construir el sitio.

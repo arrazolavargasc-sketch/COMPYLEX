@@ -16,9 +16,9 @@ def main():
     if '--compilador' in sys.argv:
         # Se mantiene la aplicación original hecha en Dear PyGui.
         return subprocess.call([sys.executable, str(BASE / 'compilador.py')])
-    path = BASE / 'grafos.html'
+    path = BASE.parent / 'public' / 'index.html'
     if not path.exists():
-        print('No se encontró grafos.html en la carpeta del programa.')
+        print('No se encontró public/index.html en la carpeta del programa.')
         return 1
     print('Abriendo COMPYLEX - Laboratorio de grafos...')
     print('También puedes abrir directamente:', path)
