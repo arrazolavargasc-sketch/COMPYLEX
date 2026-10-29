@@ -1,0 +1,3 @@
+# Solo es necesario para el analizador de expresiones original.
+# El módulo de grafos funciona directamente en el navegador sin instalaciones.
+dearpygui>=1.10,<3

@@ -1,0 +1,24 @@
+.table-heading{margin:20px 0 10px;font-size:14px;color:#dce8fa}
+.spanning-table-wrap{max-width:100%;overflow-x:auto;border:1px solid #2b3b55;border-radius:8px}
+.spanning-table{width:100%;border-collapse:collapse;text-align:left;font-size:12px}
+.spanning-table th,.spanning-table td{padding:9px 11px;border-bottom:1px solid #2b3b55}
+.spanning-table thead{background:#17263d;color:#a9c3e7}
+.spanning-table tbody tr:last-child td{border-bottom:0}
+.spanning-table tbody td:first-child,.spanning-table tbody td:last-child{text-align:center;font-variant-numeric:tabular-nums}
+.algorithm-panel{margin:18px 0;background:#121d30;border:1px solid #293750;border-radius:12px;padding:16px}
+.algorithm-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 3px 10px}
+.algorithm-panel-heading .resolver-heading{margin:0}
+.algorithm-controls{display:grid;grid-template-columns:minmax(210px,1.4fr) minmax(230px,1fr) minmax(190px,.8fr);align-items:end;gap:14px}
+.algorithm-controls .field-label{margin-top:0}
+.algorithm-actions{display:grid;gap:8px}
+.matrix-panel{margin:18px 0;background:#121d30;border:1px solid #293750;border-radius:12px;padding:16px;min-width:0}
+.matrix-panel .section-label{margin:3px 0 12px}
+.matrix-panel .matrix-wrap{max-height:420px}
+@media(max-width:700px){.algorithm-panel-heading{align-items:flex-start;flex-direction:column}.algorithm-controls{grid-template-columns:1fr}.algorithm-actions{grid-template-columns:1fr 1fr}}
+.main-layout{grid-template-columns:254px minmax(0,1fr)}
+.learn-banner{display:flex;align-items:center;gap:16px;padding:12px 28px;background:#131f32;border-bottom:1px solid #253451}
+.learn-banner strong{color:#dce8fa;font-size:13px;white-space:nowrap}
+.learn-banner p{margin:0;color:#aab9ce;font-size:12px;line-height:1.5}
+@media(max-width:1400px){.main-layout{grid-template-columns:226px minmax(0,1fr)}}
+@media(max-width:1050px){.main-layout{grid-template-columns:210px minmax(0,1fr)}}
+@media(max-width:700px){.learn-banner{align-items:flex-start;flex-direction:column;gap:4px;padding:12px 16px}}

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>COMPYLEX | Laboratorio de grafos</title>
+<link rel="stylesheet" href="grafos.css">
+<link rel="stylesheet" href="grafos-tabla.css">
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="identity"><span class="mark">C<span class="markdot">·</span></span><div><strong>COMPYLEX</strong><small>LABORATORIO DE GRAFOS</small></div></div>
+    <span class="top-divider"></span><div class="top-title"><strong id="graphTitle">Ejercicio de la pizarra</strong><small>Grafo ponderado · no dirigido</small></div>
+    <div class="header-actions"><span class="saved-label"><span class="pulse"></span> Ejercicio cargado</span><button class="outline-btn" id="resetButton" title="Restaurar el grafo exacto de la pizarra">↺ Restaurar ejemplo</button></div>
+  </header>
+  <section class="learn-banner"><strong>¿Qué es un árbol de expansión?</strong><p>Une todos los nodos sin ciclos y utiliza exactamente <em>V − 1</em> aristas. El algoritmo elige cuáles conservar.</p></section>
+  <div class="main-layout">
+    <aside class="sidebar sidebar-left">
+      <div class="section-label">ESPACIO DE TRABAJO</div>
+      <button class="nav-item active" id="exampleButton"><span>◈</span> Grafo de la pizarra <span class="nav-count">12</span></button>
+      <button class="nav-item" id="newGraphButton"><span>⊕</span> Nuevo grafo</button>
+      <div class="sidebar-rule"></div>
+      <div class="section-label">HERRAMIENTAS DE EDICIÓN</div>
+      <div class="tool-grid">
+        <button class="tool-btn active" data-mode="move"><span class="tool-icon">↔</span>Mover</button>
+        <button class="tool-btn" data-mode="add"><span class="tool-icon">⊕</span>Agregar nodo</button>
+        <button class="tool-btn" data-mode="connect"><span class="tool-icon">⌁</span>Conectar</button>
+        <button class="tool-btn" id="deleteSelected"><span class="tool-icon">⌫</span>Eliminar</button>
+      </div>
+      <p class="hint" id="modeHint">Arrastra los nodos para cambiar su posición. Selecciona un nodo o una arista para editar.</p>
+      <div class="sidebar-rule"></div>
+      <div class="section-label">PROPIEDADES</div>
+      <label class="toggle-row"><span>Grafo dirigido</span><input type="checkbox" id="directedToggle" role="switch"><span class="switch-ui"></span></label>
+      <label class="toggle-row"><span>Mostrar pesos</span><input type="checkbox" id="weightToggle" checked role="switch"><span class="switch-ui"></span></label>
+      <div class="properties" id="properties"><p>Selecciona un elemento del grafo para ver sus propiedades.</p></div>
+      <div class="sidebar-rule"></div>
+      <div class="section-label">ARCHIVOS</div>
+      <div class="stacked-actions">
+        <button class="secondary-btn" id="importButton">↥ Importar grafo (.json)</button>
+        <button class="secondary-btn" id="exportButton">↧ Exportar grafo (.json)</button>
+        <button class="secondary-btn" id="svgButton">↧ Descargar dibujo (.svg)</button>
+      </div>
+      <input type="file" accept=".json,application/json" id="fileInput" hidden>
+    </aside>
+    <main class="workspace">
+      <div class="workspace-top"><div><span class="eyebrow">VISUALIZACIÓN INTERACTIVA</span><h1 id="workspaceHeading">Grafo original de la pizarra</h1><p>Arrastra los vértices, inspecciona sus pesos y resuelve el ejercicio.</p></div>
+        <button class="focus-btn" id="focusButton" title="Ampliar para proyector">⛶ <span id="focusLabel">Modo presentación</span></button>
+      </div>
+      <div class="stats-row"><div class="stat"><div class="stat-icon">◉</div><div><strong id="nodeCount">12</strong><span>Vértices</span></div></div><div class="stat"><div class="stat-icon">⌁</div><div><strong id="edgeCount">21</strong><span>Aristas</span></div></div><div class="stat"><div class="stat-icon">⛓</div><div><strong id="graphType">No dirigido</strong><span>Tipo de grafo</span></div></div><div class="stat"><div class="stat-icon">✓</div><div><strong id="connectedStatus">Conectado</strong><span>Conectividad</span></div></div></div>
+      <div class="graph-card"><div class="graph-card-top"><span><i></i><strong>ÁREA DEL GRAFO</strong></span><div class="canvas-actions"><button id="minusZoom" title="Alejar">−</button><button id="resetZoom" title="Recentrar">⊙</button><button id="plusZoom" title="Acercar">+</button></div></div>
+        <div class="graph-container"><svg id="graphSvg" viewBox="0 0 1200 645" xmlns="http://www.w3.org/2000/svg" aria-label="Grafo interactivo del ejercicio"><defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0 H0 V28" fill="none" stroke="#25314a" stroke-width="1"/></pattern><marker id="arrow" markerWidth="10" markerHeight="10" refX="24" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L10 5 L0 10z" fill="#647b9a"/></marker></defs><rect x="0" y="0" width="1200" height="645" fill="url(#grid)" class="background-grid"/><g id="edgesLayer"></g><g id="weightsLayer"></g><g id="nodesLayer"></g></svg><div class="canvas-tip" id="canvasTip">● Arrastra un nodo para moverlo</div></div>
+        <div class="graph-card-bottom"><span><span class="legend-edge"></span> Arista</span><span><span class="legend-dot"></span> Nodo</span><span><span class="legend-highlight"></span> Resultado del algoritmo</span><span class="graph-zoom" id="zoomLabel">100%</span></div>
+      </div>
+      <section class="matrix-panel">
+        <div class="section-label">MATRICES</div>
+        <div class="matrix-tabs"><button class="matrix-tab active" data-matrix="adjacency">Adyacencia</button><button class="matrix-tab" data-matrix="incidence">Incidencia</button></div>
+        <p class="matrix-help" id="matrixHint">Matriz ponderada: — indica ausencia de arista.</p>
+        <div class="matrix-wrap" id="matrixTable"></div>
+      </section>
+      <section class="algorithm-panel">
+        <div class="algorithm-panel-heading"><span class="eyebrow">CENTRO DE ALGORITMOS</span><div class="resolver-heading"><span class="resolver-ico">⚙</span><div><strong>Resolver grafo</strong><small>Calcula y visualiza resultados</small></div></div></div>
+        <div class="algorithm-controls">
+          <div><label class="field-label" for="algorithm">Selecciona el algoritmo</label>
+            <select class="field" id="algorithm"><optgroup label="Árboles de expansión"><option value="kruskal-min">Kruskal · Mínimo</option><option value="kruskal-max">Kruskal · Máximo</option><option value="prim-min">Prim · Mínimo</option><option value="prim-max">Prim · Máximo</option></optgroup><optgroup label="Recorridos"><option value="bfs">Búsqueda en anchura (BFS)</option><option value="dfs">Búsqueda en profundidad (DFS)</option></optgroup><optgroup label="Caminos mínimos"><option value="dijkstra">Dijkstra</option><option value="floyd">Floyd-Warshall</option></optgroup></select>
+          </div>
+          <div class="input-pair"><div><label class="field-label" for="origin">Origen</label><select id="origin" class="field"></select></div><div><label class="field-label" for="destination">Destino</label><select id="destination" class="field"></select></div></div>
+          <div class="algorithm-actions"><button class="run-btn" id="runButton"><span>▷</span> Resolver ejercicio</button><button class="secondary-btn full-width" id="checkTreeButton">✓ Verificar condiciones de árbol</button></div>
+        </div>
+      </section>
+      <section class="bottom-area"><div class="result-header"><div><span class="eyebrow">ANÁLISIS DEL EJERCICIO</span><h2 id="resultTitle">Tu grafo está listo</h2></div><button class="text-btn" id="clearHighlight">Limpiar resultado ×</button></div><div class="result-text" id="resultContent">El grafo de la pizarra está cargado. Elige un algoritmo en el panel derecho para mostrar su solución y resaltar las conexiones utilizadas.</div></section>
+      <div class="footer-help">COMPYLEX · El grafo de la pizarra contiene 12 nodos y 21 aristas ponderadas. El árbol de expansión tendrá 11 aristas.</div>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</div>
+<script src="grafo_algoritmos.js"></script><script src="grafos.js"></script>
+</body>
+</html>
